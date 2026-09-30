@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5BFG02Y77D"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-5BFG02Y77D');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Beyond Memorization | Real Education Revolution</title>
+    <meta name="description" content="A global nonprofit education revolution dedicated to stopping outdated rote learning systems and empowering young creators.">
+
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Core JS Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --bg: #020005;
+            --text: #ffffff;
+            --brand-cyan: #00f3ff;
+            --brand-purple: #bc13fe;
+            --brand-blue: #0055ff;
+            --brand-magenta: #ff0055;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Smooth Scroll Setup */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        ::-webkit-scrollbar { display: none; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        ::-moz-selection { background-color: var(--brand-purple); color: #ffffff; }
+        ::selection { background-color: var(--brand-purple); color: #ffffff; }
+        
+        a { text-decoration: none; color: inherit; transition: color 0.3s; }
+        button { background: none; border: none; cursor: pointer; font-family: inherit; }
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+        
+        .container { width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 1.5rem; }
+        @media (min-width: 768px) { .container { padding: 0 3rem; } }
+        
+        /* 3D Canvas */
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; background: #020005; }
+
+        /* Header Navigation */
+        .site-header { position: fixed; top: 0; left: 0; width: 100%; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; z-index: 50; mix-blend-mode: difference; pointer-events: none; }
+        @media (min-width: 768px) { .site-header { padding: 2.5rem; } }
+        .site-header > * { pointer-events: auto; }
+        .logo { font-size: 1.25rem; font-weight: 900; text-transform: uppercase; letter-spacing: -0.05em; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
+        .logo-icon { width: 24px; height: 24px; color: var(--brand-cyan); }
+        .logo span { color: rgba(255,255,255,0.5); }
+        
+        .nav-links { display: none; gap: 2.5rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; }
+        @media (min-width: 768px) { .nav-links { display: flex; } }
+        .nav-links a:hover { color: var(--brand-cyan); }
+        
+        .header-actions { display: flex; align-items: center; gap: 1rem; }
+        .contact-btn-wrap { display: none; }
+        @media (min-width: 768px) { .contact-btn-wrap { display: block; } .menu-btn { display: none; } }
+        .menu-btn { color: white; padding: 0.5rem; }
+
+        /* Magnetic Buttons */
+        .magnetic-btn-wrap { display: inline-block; position: relative; z-index: 10; }
+        .btn-outline { border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; padding: 12px 30px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; transition: all 0.3s; backdrop-filter: blur(10px); display: inline-flex; align-items: center; justify-content: center; color: white; background: rgba(255,255,255,0.05); }
+        .btn-outline:hover { background: white; color: black; transform: scale(1.05); border-color: white; box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
+        .btn-outline svg { margin-left: 0.5rem; width: 1rem; height: 1rem; }
+        .btn-primary { background: linear-gradient(90deg, var(--brand-cyan), var(--brand-purple)); color: white; border: none; box-shadow: 0 0 20px rgba(188, 19, 254, 0.4); }
+        .btn-primary:hover { background: white; color: black; box-shadow: 0 0 30px rgba(255, 255, 255, 0.6); }
+
+        /* Hero Section */
+        .hero-section { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; z-index: 10; overflow: hidden; padding: 0 1rem; }
+        .hero-content { text-align: center; max-width: 90rem; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        
+        .hero-title { font-size: 9vw; line-height: 1; letter-spacing: -0.04em; text-align: center; width: 100%; margin: 0 auto; text-transform: uppercase; }
+        .hero-subtitle { display: block; font-size: 4vw; color: rgba(255, 255, 255, 0.7); letter-spacing: -0.01em; margin-top: 1.5rem; font-weight: 500; text-transform: none; line-height: 1.4; font-family: 'Inter', sans-serif; }
+        
+        @media (min-width: 768px) {
+            .hero-title { font-size: 7vw; line-height: 0.95; }
+            .hero-subtitle { font-size: 1.8rem; margin-top: 2rem; max-width: 800px; }
+        }
+
+        /* Ambient Floating Elements */
+        .ambient-float { position: absolute; opacity: 0.15; pointer-events: none; animation: floatAmbient 8s ease-in-out infinite; }
+        .ambient-float-delayed { position: absolute; opacity: 0.15; pointer-events: none; animation: floatAmbient 9s ease-in-out infinite 2s; }
+        .hero-svg-1 { top: 15%; left: 10%; }
+        .hero-svg-2 { bottom: 20%; right: 15%; }
+        @keyframes floatAmbient { 0%, 100% { transform: translateY(0) rotate(0) scale(1); } 50% { transform: translateY(-30px) rotate(10deg) scale(1.05); } }
+
+        /* Story Scroll Sections */
+        .story-section { height: 120vh; display: flex; align-items: center; justify-content: center; position: relative; z-index: 10; }
+        .story-text { font-size: clamp(1.8rem, 5vw, 4rem); font-weight: 500; text-align: center; max-width: 1400px; padding: 0 2rem; opacity: 0; transform: translateY(50px); text-shadow: 0 4px 30px rgba(0,0,0,0.9); line-height: 1.2; letter-spacing: -0.02em; }
+        .story-text span { color: transparent; background-image: linear-gradient(90deg, var(--brand-cyan), var(--brand-purple)); -webkit-background-clip: text; background-clip: text; font-weight: 700; }
+
+        /* Engage / Problem Section */
+        .engage-section { padding: 5rem 0; position: relative; z-index: 20; background: rgba(2,0,5,0.7); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); margin-top: 10vh; }
+        @media (min-width: 768px) { .engage-section { padding: 10rem 0; margin-top: 20vh; } }
+        .section-header { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: -0.05em; text-align: center; margin-bottom: 3rem; line-height: 1; }
+        .section-header span { color: var(--brand-purple); }
+        @media (min-width: 768px) { .section-header { font-size: 4.5rem; margin-bottom: 6rem; } }
+
+        /* Gradient Glass Cards */
+        .gradient-card { display: flex; flex-direction: column; gap: 1.5rem; padding: 2.5rem; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 2rem; transform-style: preserve-3d; transform: perspective(1000px); box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        @media (min-width: 768px) { .gradient-card { flex-direction: row; padding: 4rem; gap: 4rem; align-items: center; justify-content: space-between; } }
+        
+        .grad-1 { background: linear-gradient(135deg, rgba(10,0,26,0.8) 0%, rgba(0,34,102,0.8) 50%, rgba(112,0,255,0.4) 100%); }
+        .grad-2 { background: linear-gradient(135deg, rgba(5,0,17,0.8) 0%, rgba(26,0,51,0.8) 50%, rgba(188,19,254,0.4) 100%); }
+        .grad-3 { background: linear-gradient(135deg, rgba(0,17,26,0.8) 0%, rgba(0,77,102,0.8) 50%, rgba(0,243,255,0.4) 100%); }
+        
+        .card-inner { transform: translateZ(30px); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); width: 100%; z-index: 2; }
+        @media (min-width: 768px) { .card-left { width: 55%; } .card-right { width: 35%; } }
+
+        .card-icon { font-size: 3rem; color: white; margin-bottom: 1.5rem; display: inline-block; }
+        .card-title { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: -0.05em; margin-bottom: 1rem; line-height: 1; }
+        @media (min-width: 768px) { .card-title { font-size: 4rem; } }
+        .card-desc { font-size: 1.125rem; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.8); max-width: 35rem; }
+        @media (min-width: 768px) { .card-desc { font-size: 1.5rem; } }
+        
+        .card-list { display: flex; flex-direction: column; gap: 1rem; list-style: none; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; }
+        @media (min-width: 768px) { .card-list { border-top: none; padding-top: 0; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 3rem; } }
+        .card-list li { display: flex; align-items: flex-start; gap: 1rem; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.9); line-height: 1.4; }
+
+        /* Building / Bento Grid */
+        .revolution-section { padding: 6rem 0; position: relative; z-index: 20; background: #020005; }
+        @media (min-width: 768px) { .revolution-section { padding: 10rem 0; } }
+        .bento-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media (min-width: 768px) { .bento-grid { grid-template-columns: repeat(3, 1fr); grid-auto-rows: minmax(300px, auto); } }
+        
+        .neon-bento { background: rgba(10,10,10,0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; display: flex; flex-direction: column; transition: all 0.4s; transform-style: preserve-3d; transform: perspective(1000px); overflow: hidden; position: relative; }
+        @media (min-width: 768px) { .neon-bento { padding: 3.5rem; } }
+        .neon-bento:hover { background: rgba(20,20,25,0.8); border-color: rgba(0,243,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 40px rgba(0,243,255,0.05); }
+        
+        .bento-wide { grid-column: span 1; }
+        @media (min-width: 768px) { .bento-wide { grid-column: span 2; } }
+        
+        .bento-icon { width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; margin-bottom: auto; transform: translateZ(20px); color: var(--brand-cyan); }
+        .bento-icon svg { width: 40px; height: 40px; stroke-width: 1.5; }
+        .bento-content { transform: translateZ(10px); margin-top: 3rem; }
+        .bento-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem; font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
+        .bento-desc { font-size: 1rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+        /* Stats Section */
+        .stats-section { padding: 6rem 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); background: linear-gradient(90deg, rgba(0,243,255,0.03), rgba(188,19,254,0.03)); position: relative; z-index: 20; }
+        .stats-container { display: flex; flex-direction: column; gap: 4rem; justify-content: space-around; text-align: center; }
+        @media (min-width: 768px) { .stats-container { flex-direction: row; } }
+        .stat-item { flex: 1; }
+        .stat-num { font-size: 4rem; font-weight: 900; font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.05em; background: linear-gradient(135deg, #fff, var(--brand-cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 0.5rem; }
+        @media (min-width: 768px) { .stat-num { font-size: 6rem; } }
+        .stat-label { font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.5); }
+
+        /* Liquid Glass Footer */
+        .footer-reveal { background: linear-gradient(180deg, rgba(20, 0, 30, 0.8) 0%, rgba(50, 0, 80, 0.95) 60%, #bc13fe 100%); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border-top: 1px solid rgba(255, 255, 255, 0.1); color: white; position: relative; z-index: 20; padding-top: 15vh; display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; overflow: hidden; }
+        .footer-top { padding-top: 2rem; position: relative; z-index: 2; }
+        @media (min-width: 768px) { .footer-top { padding-top: 5rem; } }
+        
+        .quote-icon { font-size: 4rem; color: rgba(255,255,255,0.2); margin-bottom: 2rem; display: block; }
+        .footer-title { font-size: 2.5rem; line-height: 1.2; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 3rem; color: white; max-width: 1200px; font-family: 'Inter', sans-serif; font-style: italic; }
+        @media (min-width: 768px) { .footer-title { font-size: 4.5rem; margin-bottom: 4rem; } }
+        
+        .founder-block { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 4rem; }
+        .founder-avatar { width: 4rem; height: 4rem; border-radius: 50%; background: linear-gradient(135deg, var(--brand-cyan), var(--brand-purple)); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.5rem; font-family: 'Space Grotesk', sans-serif; box-shadow: 0 0 20px rgba(188,19,254,0.5); border: 2px solid white; }
+        @media (min-width: 768px) { .founder-avatar { width: 5rem; height: 5rem; font-size: 2rem; } }
+        .founder-info h4 { font-size: 1.25rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+        @media (min-width: 768px) { .founder-info h4 { font-size: 1.5rem; } }
+        .founder-info p { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); margin-top: 0.25rem; }
+        
+        .footer-mid { margin-top: 2rem; padding-top: 2.5rem; padding-bottom: 2.5rem; display: flex; flex-direction: column; gap: 3rem; border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 2; }
+        @media (min-width: 768px) { .footer-mid { flex-direction: row; justify-content: space-between; align-items: center; } }
+        
+        .footer-brand { font-size: 2rem; font-weight: 900; font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.05em; display: flex; flex-direction: column; }
+        .footer-brand span { font-size: 0.875rem; font-weight: 500; font-family: 'Inter', sans-serif; letter-spacing: 0; color: rgba(255,255,255,0.7); margin-top: 0.5rem; }
+
+        .footer-links-wrap { display: flex; flex-direction: column; gap: 2rem; }
+        @media (min-width: 640px) { .footer-links-wrap { flex-direction: row; gap: 4rem; } }
+        .footer-links-col { display: flex; flex-direction: column; gap: 1rem; font-size: 0.875rem; font-weight: 600; color: white; }
+        .footer-links-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem; }
+        .footer-link { display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s; }
+        .footer-link:hover { color: var(--brand-cyan); transform: translateX(5px); }
+        .footer-link svg { width: 1.2rem; height: 1.2rem; flex-shrink: 0; }
+
+        .footer-bottom { padding-bottom: 2rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); position: relative; z-index: 2; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; }
+
+        /* GSAP Animation Utilities */
+        .char-wrapper { display: inline-block; overflow: hidden; padding-bottom: 0.1em; margin-bottom: -0.1em; }
+        .gs-char { display: inline-block; transform: translateY(110%) rotateX(-90deg); transform-origin: bottom; opacity: 0; }
+        
+        /* Floating CTA */
+        .chat-fab {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 99;
+            background: linear-gradient(135deg, var(--brand-cyan), var(--brand-purple));
+            color: white; padding: 0.75rem 1.5rem 0.75rem 0.75rem;
+            border-radius: 50px; display: flex; align-items: center; gap: 0.75rem;
+            font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em;
+            box-shadow: 0 10px 30px rgba(188, 19, 254, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .chat-fab:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 40px rgba(0, 243, 255, 0.6); }
+        .chat-icon-wrapper { background: rgba(255, 255, 255, 0.2); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; }
+        .chat-fab svg { width: 18px; height: 18px; color: white; fill: white; }
+        @media (max-width: 768px) {
+            .chat-fab { bottom: 1.5rem; right: 1.5rem; padding: 1rem; border-radius: 50%; }
+            .chat-text { display: none; }
+            .chat-icon-wrapper { background: transparent; width: auto; height: auto; }
+            .chat-fab svg { width: 24px; height: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3D WEBGL SCENE -->
+    <div id="canvas-container"></div>
+
+    <!-- NAVIGATION -->
+    <header class="site-header">
+        <div class="logo gs-nav-item" onclick="window.scrollTo(0,0)">
+            <i data-lucide="infinity" class="logo-icon"></i>
+            BEYOND <span>MEMORIZATION</span>
+        </div>
+        
+        <nav class="nav-links">
+            <a href="#problem" class="gs-nav-item">The Problem</a>
+            <a href="#mission" class="gs-nav-item">Mission</a>
+            <a href="#build" class="gs-nav-item">Infrastructure</a>
+        </nav>
+
+        <div class="header-actions gs-nav-item">
+            <div class="magnetic-btn-wrap contact-btn-wrap">
+                <a href="https://wa.me/919446071043?text=I%20want%20to%20join%20Beyond%20Memorization" target="_blank" class="btn-outline magnetic-element">Join Revolution</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="smooth-wrapper">
+        <div id="smooth-content">
+            
+            <!-- HERO -->
+            <section class="hero-section">
+                <!-- Abstract floating geometry -->
+                <svg class="ambient-float hero-svg-1" width="60" height="60" viewBox="0 0 100 100" fill="none" stroke="rgba(0,243,255,0.5)" stroke-width="2">
+                    <polygon points="50,10 90,90 10,90"/>
+                </svg>
+                <svg class="ambient-float-delayed hero-svg-2" width="80" height="80" viewBox="0 0 100 100" fill="none" stroke="rgba(188,19,254,0.5)" stroke-width="1.5">
+                    <circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="20"/>
+                </svg>
+
+                <div class="hero-content z-10 px-6">
+                    <h1 class="font-display font-black hero-title split-chars">
+                        THE EDUCATION <br>REVOLUTION
+                    </h1>
+                    <p class="hero-subtitle font-sans gs-nav-item">
+                        A global nonprofit movement empowering young creators to think, build, and innovate beyond outdated systems.
+                    </p>
+                    <div class="magnetic-btn-wrap mt-10 gs-nav-item" style="margin-top: 3rem;">
+                        <a href="#problem" class="btn-primary btn-outline magnetic-element" style="padding: 16px 40px; font-size: 1rem;">
+                            Read Manifesto <i data-lucide="arrow-down"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCROLL STORIES -->
+            <section class="story-section" id="problem">
+                <p class="story-text">
+                    The system is training memory. <span>Not minds.</span>
+                </p>
+            </section>
+
+            <section class="story-section">
+                <p class="story-text">
+                    We refuse to accept rote learning as intelligence. We are producing robots in an age where <span>AI already exists.</span>
+                </p>
+            </section>
+
+            <section class="story-section">
+                <p class="story-text">
+                    We are replacing classrooms with collaborative hubs designed for <span>the 21st century.</span>
+                </p>
+            </section>
+
+            <!-- THE PROBLEM (GRADIENT CARDS) -->
+            <section id="mission" class="engage-section">
+                <div class="container">
+                    <div style="overflow:hidden;">
+                        <h2 class="section-header font-display split-chars">The Broken <span>System</span></h2>
+                    </div>
+                    
+                    <div>
+                        <!-- CARD 1 -->
+                        <div class="gradient-card grad-1 tilt-element gs-card">
+                            <div class="card-inner card-left">
+                                <i data-lucide="book-x" class="card-icon" style="color: var(--brand-magenta)"></i>
+                                <h3 class="card-title font-display">Rote Learning</h3>
+                                <p class="card-desc">
+                                    Schools test how well you remember, not how well you understand. Creativity is sacrificed for compliance.
+                                </p>
+                            </div>
+                            <div class="card-inner card-right">
+                                <ul class="card-list gs-list">
+                                    <li><i data-lucide="x-circle" style="color:var(--brand-magenta); width: 1.2rem;"></i> Outdated factory-era curriculum</li>
+                                    <li><i data-lucide="x-circle" style="color:var(--brand-magenta); width: 1.2rem;"></i> Rewards repetition over reasoning</li>
+                                    <li><i data-lucide="x-circle" style="color:var(--brand-magenta); width: 1.2rem;"></i> Crushes natural curiosity</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- CARD 2 -->
+                        <div class="gradient-card grad-2 tilt-element gs-card">
+                            <div class="card-inner card-left">
+                                <i data-lucide="brain-circuit" class="card-icon" style="color: var(--brand-cyan)"></i>
+                                <h3 class="card-title font-display">No Critical Thinking</h3>
+                                <p class="card-desc">
+                                    Students are told what to think, not how to think. Memorization is completely obsolete in the era of Artificial Intelligence.
+                                </p>
+                            </div>
+                            <div class="card-inner card-right">
+                                <ul class="card-list gs-list">
+                                    <li><i data-lucide="x-circle" style="color:var(--brand-cyan); width: 1.2rem;"></i> Lack of problem-solving frameworks</li>
+                                    <li><i data-lucide="x-circle" style="color:var(--brand-cyan); width: 1.2rem;"></i> Standardized testing dependency</li>
+                                    <li><i data-lucide="x-circle" style="color:var(--brand-cyan); width: 1.2rem;"></i> Zero focus on innovation</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- CARD 3 -->
+                        <div class="gradient-card grad-3 tilt-element gs-card">
+                            <div class="card-inner card-left">
+                                <i data-lucide="hammer" class="card-icon" style="color: var(--brand-purple)"></i>
+                                <h3 class="card-title font-display">No Real Skills</h3>
+                                <p class="card-desc">
+                                    Graduates enter the world entirely unprepared to build, innovate, or solve the complex technical problems of tomorrow.
+                                </p>
+                            </div>
+                            <div class="card-inner card-right">
+                                <ul class="card-list gs-list">
+                                    <li><i data-lucide="x-circle" style="color:var(--brand-purple); width: 1.2rem;"></i> Disconnected from modern tech</li>
+                                    <li><i data-lucide="x-circle" style="color:var(--brand-purple); width: 1.2rem;"></i> Theory without practical application</li>
+                                    <li><i data-lucide="x-circle" style="color:var(--brand-purple); width: 1.2rem;"></i> Graduates lack execution capability</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STATS SECTION -->
+            <section class="stats-section">
+                <div class="container stats-container">
+                    <div class="stat-item gs-stat">
+                        <div class="stat-num counter" data-target="1500000000">0</div>
+                        <div class="stat-label">Students Stuck in Outdated Systems</div>
+                    </div>
+                    <div class="stat-item gs-stat">
+                        <div class="stat-num counter" data-target="500000">0</div>
+                        <div class="stat-label">Creators Waiting To Rise</div>
+                    </div>
+                    <div class="stat-item gs-stat">
+                        <div class="stat-num counter" data-target="1000000">0</div>
+                        <div class="stat-label">Ideas Never Built</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WHAT WE BUILD (BENTO GRID) -->
+            <section id="build" class="revolution-section">
+                <div class="container">
+                    <div style="overflow:hidden;">
+                        <h2 class="section-header font-display split-chars">What We're <span>Building</span></h2>
+                    </div>
+                    
+                    <div class="bento-grid">
+                        <div class="neon-bento bento-wide tilt-element gs-bento">
+                            <div class="bento-icon"><i data-lucide="network"></i></div>
+                            <div class="bento-content">
+                                <h4 class="bento-title">Modern Learning Ecosystems</h4>
+                                <p class="bento-desc">We are actively replacing traditional classrooms with decentralized, collaborative hubs designed specifically for the 21st century creator and engineer.</p>
+                            </div>
+                        </div>
+
+                        <div class="neon-bento tilt-element gs-bento">
+                            <div class="bento-icon" style="color: var(--brand-purple)"><i data-lucide="flask-conical"></i></div>
+                            <div class="bento-content">
+                                <h4 class="bento-title">Innovation Labs</h4>
+                                <p class="bento-desc">Physical and digital spaces equipped with cutting-edge tech, enabling students to prototype and build real-world solutions.</p>
+                            </div>
+                        </div>
+
+                        <div class="neon-bento tilt-element gs-bento">
+                            <div class="bento-icon" style="color: var(--brand-magenta)"><i data-lucide="cpu"></i></div>
+                            <div class="bento-content">
+                                <h4 class="bento-title">AI-Powered Systems</h4>
+                                <p class="bento-desc">Utilizing advanced artificial intelligence to personalize learning, accelerating comprehension rather than enforcing memorization.</p>
+                            </div>
+                        </div>
+
+                        <div class="neon-bento bento-wide tilt-element gs-bento">
+                            <div class="bento-icon" style="color: #fff"><i data-lucide="rocket"></i></div>
+                            <div class="bento-content">
+                                <h4 class="bento-title">Project-Based Frameworks</h4>
+                                <p class="bento-desc">The era of transcripts is over. We believe in learning by doing. Our curriculum focuses on building an actual portfolio of deployed projects, startups, and tangible innovations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IMMERSIVE FOOTER / FOUNDER MESSAGE -->
+            <footer class="footer-reveal">
+                <div class="container footer-top">
+                    <i data-lucide="quote" class="quote-icon gs-footer-item"></i>
+                    <div style="overflow:hidden;">
+                        <h2 class="footer-title split-words footer-title-anim">
+                            "I refused to accept memorization as intelligence. Watching brilliant minds being reduced to mere storage devices broke me. We are giving youth the tools, the tech, and the community to build the future they actually want to live in."
+                        </h2>
+                    </div>
+                    
+                    <div class="founder-block gs-footer-item">
+                        <div class="founder-avatar">JJ</div>
+                        <div class="founder-info">
+                            <h4>Johan Jomet</h4>
+                            <p>Founder & CEO, Beyond Memorization</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container footer-mid gs-footer-item">
+                    <div class="footer-brand">
+                        BEYOND MEMORIZATION
+                        <span>An Initiative by JJ Coders</span>
+                    </div>
+
+                    <div class="footer-links-wrap">
+                        <div class="footer-links-col">
+                            <span class="footer-links-title">Take Action</span>
+                            <a href="https://wa.me/919446071043" target="_blank" class="magnetic-btn-wrap" style="margin-top: 10px;">
+                                <button class="btn-outline magnetic-element btn-primary" style="padding: 15px 30px; font-size: 0.9rem;">
+                                    Join the Revolution <i data-lucide="arrow-up-right"></i>
+                                </button>
+                            </a>
+                        </div>
+                        
+                        <div class="footer-links-col" style="margin-left: 2rem;">
+                            <span class="footer-links-title">Connect</span>
+                            <a href="https://wa.me/919446071043" class="footer-link"><i data-lucide="message-circle"></i> WhatsApp Core</a>
+                            <a href="mailto:jjcoders@outlook.com" class="footer-link"><i data-lucide="mail"></i> Email HQ</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container footer-bottom gs-footer-item">
+                    &copy; <span id="year"></span> Beyond Memorization | A Global Youth Movement. Save Education.
+                </div>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- FLOATING JOIN BUTTON -->
+    <a href="https://wa.me/919446071043?text=I%20want%20to%20join%20Beyond%20Memorization" target="_blank" class="chat-fab magnetic-element">
+        <div class="chat-icon-wrapper">
+            <i data-lucide="zap"></i>
+        </div>
+        <span class="chat-text">Join Movement</span>
+    </a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.registerPlugin(ScrollTrigger);
+            document.getElementById('year').textContent = new Date().getFullYear();
+            lucide.createIcons();
+            
+            initLenis();
+            splitTextForAnimation(); 
+            initThreeJS();
+            initScrollAnimations();
+            initInteractiveElements();
+            initCounters();
+        });
+
+        // --- INTERACTIVE ELEMENTS (Magnets & Tilts) ---
+        function initInteractiveElements() {
+            if(window.innerWidth < 768) return; 
+
+            const magneticElements = document.querySelectorAll('.magnetic-element');
+            magneticElements.forEach((elem) => {
+                elem.addEventListener('mousemove', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const h = rect.width / 2;
+                    const v = rect.height / 2;
+                    const x = e.clientX - rect.left - h;
+                    const y = e.clientY - rect.top - v;
+                    gsap.to(this, { x: x * 0.4, y: y * 0.4, duration: 0.5, ease: "power3.out" });
+                });
+                elem.addEventListener('mouseleave', function() {
+                    gsap.to(this, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" });
+                });
+            });
+
+            const tiltElements = document.querySelectorAll('.tilt-element');
+            tiltElements.forEach((elem) => {
+                elem.addEventListener('mousemove', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -10;
+                    const rotateY = ((x - centerX) / centerX) * 10;
+                    this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+                elem.addEventListener('mouseleave', function() {
+                    this.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                });
+            });
+        }
+
+        // --- TEXT SPLITTING FOR GSAP ---
+        function splitTextForAnimation() {
+            document.querySelectorAll('.split-chars').forEach(el => {
+                const text = el.innerText;
+                el.innerHTML = text.split('').map(char => 
+                    char === ' ' || char === '\n' ? (char === '\n' ? '<br>' : '&nbsp;') : `<div class="char-wrapper"><span class="gs-char">${char}</span></div>`
+                ).join('');
+            });
+            document.querySelectorAll('.split-words').forEach(el => {
+                const words = el.innerText.split(' ');
+                el.innerHTML = words.map(word => 
+                    `<div class="char-wrapper"><span class="gs-char">${word}</span></div>&nbsp;`
+                ).join('');
+            });
+        }
+
+        // --- NUMBER COUNTERS ---
+        function formatNumber(num) {
+            if (num >= 1000000000) return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'B+';
+            if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M+';
+            if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K+';
+            return num + '+';
+        }
+
+        function initCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                ScrollTrigger.create({
+                    trigger: counter,
+                    start: "top 80%",
+                    once: true,
+                    onEnter: () => {
+                        let obj = { val: 0 };
+                        gsap.to(obj, {
+                            val: target,
+                            duration: 2.5,
+                            ease: "power2.out",
+                            onUpdate: function() {
+                                counter.innerHTML = formatNumber(Math.ceil(obj.val));
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+        // --- DOM SCROLL ANIMATIONS (GSAP) ---
+        function initScrollAnimations() {
+            const tl = gsap.timeline();
+            
+            tl.from(".gs-nav-item", { y: -20, opacity: 0, duration: 1, stagger: 0.1, ease: "power3.out" });
+            tl.to(".hero-title .gs-char", { y: 0, rotateX: 0, opacity: 1, duration: 1.2, stagger: 0.02, ease: "back.out(1.5)" }, "-=0.5");
+            
+            ScrollTrigger.refresh();
+
+            gsap.to(".hero-content", { scrollTrigger: { trigger: ".hero-section", start: "top top", end: "bottom top", scrub: true }, opacity: 0, scale: 0.9, y: -100 });
+
+            const storySections = document.querySelectorAll('.story-section');
+            storySections.forEach((sec) => {
+                const text = sec.querySelector('.story-text');
+                gsap.to(text, { scrollTrigger: { trigger: sec, start: "top 60%", end: "top 20%", scrub: 1 }, opacity: 1, y: 0 });
+                gsap.to(text, { scrollTrigger: { trigger: sec, start: "bottom 80%", end: "bottom 20%", scrub: 1 }, opacity: 0, y: -50, scale: 0.95 });
+            });
+
+            gsap.to(".engage-section .split-chars .gs-char", { scrollTrigger: { trigger: ".engage-section", start: "top 80%" }, y: 0, rotateX: 0, opacity: 1, duration: 0.8, stagger: 0.02, ease: "power3.out" });
+            
+            gsap.fromTo(".gs-card", 
+                { y: 100, opacity: 0, rotationX: 10 },
+                { scrollTrigger: { trigger: ".engage-section", start: "top 60%" }, y: 0, opacity: 1, rotationX: 0, duration: 1, stagger: 0.2, ease: "power3.out" }
+            );
+            
+            document.querySelectorAll(".gs-list").forEach(list => {
+                gsap.fromTo(list.children, 
+                    { x: -20, opacity: 0 },
+                    { scrollTrigger: { trigger: list, start: "top 85%" }, x: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out" }
+                );
+            });
+
+            gsap.fromTo(".gs-stat", 
+                { y: 50, opacity: 0 },
+                { scrollTrigger: { trigger: ".stats-section", start: "top 75%" }, y: 0, opacity: 1, duration: 0.8, stagger: 0.2, ease: "power2.out" }
+            );
+
+            gsap.to(".revolution-section .split-chars .gs-char", { scrollTrigger: { trigger: ".revolution-section", start: "top 80%" }, y: 0, rotateX: 0, opacity: 1, duration: 0.8, stagger: 0.02, ease: "power3.out" });
+            
+            gsap.fromTo(".gs-bento", 
+                { y: 50, scale: 0.95, opacity: 0 },
+                { scrollTrigger: { trigger: ".revolution-section", start: "top 75%" }, y: 0, scale: 1, opacity: 1, duration: 0.8, stagger: 0.15, ease: "back.out(1.2)" }
+            );
+
+            gsap.to(".footer-title-anim .gs-char", { scrollTrigger: { trigger: ".footer-reveal", start: "top 50%" }, y: 0, rotateX: 0, opacity: 1, duration: 0.8, stagger: 0.015, ease: "power3.out" });
+            
+            gsap.fromTo(".gs-footer-item", 
+                { y: 30, opacity: 0 },
+                { scrollTrigger: { trigger: ".footer-reveal", start: "top 40%" }, y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power2.out" }
+            );
+
+            gsap.to("#canvas-container", { scrollTrigger: { trigger: ".footer-reveal", start: "top 100%", end: "bottom bottom", scrub: true }, opacity: 0.2, filter: "blur(10px)" });
+        }
+
+        // --- MISSION CONTROL 3D ENGINE (Modified for BM) ---
+        function initThreeJS() {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x020005, 0.001);
+
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Deep Space Nebula Glow
+            function createRadialGradient(c1, c2, c3) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 512; canvas.height = 512;
+                const ctx = canvas.getContext('2d');
+                const gradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 256);
+                gradient.addColorStop(0, c1);
+                gradient.addColorStop(0.3, c2);
+                gradient.addColorStop(0.7, c3);
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 512, 512);
+                return new THREE.CanvasTexture(canvas);
+            }
+            
+            const nebulaMat = new THREE.SpriteMaterial({ map: createRadialGradient('rgba(0, 243, 255, 0.8)', 'rgba(188, 19, 254, 0.4)', 'rgba(0, 85, 255, 0.1)'), blending: THREE.AdditiveBlending, transparent: true, opacity: 0.5 });
+            const nebula = new THREE.Sprite(nebulaMat);
+            nebula.scale.set(1200, 1200, 1);
+            nebula.position.z = -1200;
+            scene.add(nebula);
+
+            // Stars
+            const starGeo = new THREE.BufferGeometry();
+            const starCount = 4000;
+            const starPos = new Float32Array(starCount * 3);
+            for(let i=0; i<starCount*3; i++) {
+                starPos[i] = (Math.random() - 0.5) * 3000;
+                starPos[i+1] = (Math.random() - 0.5) * 2000;
+                starPos[i+2] = (Math.random() - 1.0) * 2000; 
+            }
+            starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+            
+            const dotCanvas = document.createElement('canvas');
+            dotCanvas.width = 16; dotCanvas.height = 16;
+            const dCtx = dotCanvas.getContext('2d');
+            dCtx.beginPath(); dCtx.arc(8, 8, 8, 0, Math.PI*2); dCtx.fillStyle = '#ffffff'; dCtx.fill();
+            const starTex = new THREE.CanvasTexture(dotCanvas);
+
+            const starMat = new THREE.PointsMaterial({ size: 1.5, map: starTex, transparent: true, blending: THREE.AdditiveBlending, opacity: 0.6 });
+            const stars = new THREE.Points(starGeo, starMat);
+            scene.add(stars);
+
+            // Core Geometric "Ship/Idea" Marker (Replaces standard ship with a sleek paper plane/arrow)
+            const shipGroup = new THREE.Group();
+            
+            // Sleek paper plane geometry
+            const planeGeo = new THREE.BufferGeometry();
+            const vertices = new Float32Array([
+                0, 0, 4,      // nose
+                -2, 0.5, -2,  // left wing
+                0, -1, -2,    // bottom tail
+                
+                0, 0, 4,      // nose
+                0, -1, -2,    // bottom tail
+                2, 0.5, -2    // right wing
+            ]);
+            planeGeo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+            planeGeo.computeVertexNormals();
+            
+            const planeMat = new THREE.MeshStandardMaterial({ 
+                color: 0xffffff, metalness: 0.9, roughness: 0.1, 
+                side: THREE.DoubleSide, flatShading: true 
+            });
+            const shipMesh = new THREE.Mesh(planeGeo, planeMat);
+            shipGroup.add(shipMesh);
+
+            // Engine Trail
+            const trailMat = new THREE.SpriteMaterial({ map: createRadialGradient('rgba(0, 243, 255, 1)', 'rgba(188, 19, 254, 0.5)', 'rgba(0,0,0,0)'), blending: THREE.AdditiveBlending });
+            const engineGlow = new THREE.Sprite(trailMat);
+            engineGlow.position.z = -2;
+            engineGlow.position.y = -0.5;
+            engineGlow.scale.set(6, 6, 1);
+            shipGroup.add(engineGlow);
+
+            scene.add(shipGroup);
+
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 3);
+            dirLight.position.set(10, 20, 10);
+            scene.add(dirLight);
+            const blueLight = new THREE.PointLight(0x00f3ff, 5, 50);
+            blueLight.position.set(-5, 5, 5);
+            shipGroup.add(blueLight);
+            const purpleLight = new THREE.PointLight(0xbc13fe, 5, 50);
+            purpleLight.position.set(5, -5, 5);
+            shipGroup.add(purpleLight);
+
+            // Abstract Planets / Data Nodes
+            function createNode(color, size, x, y, z) {
+                const geo = new THREE.IcosahedronGeometry(size, 1); // Low poly futuristic look
+                const mat = new THREE.MeshStandardMaterial({ color: color, roughness: 0.3, metalness: 0.8, flatShading: true });
+                const node = new THREE.Mesh(geo, mat);
+                node.position.set(x, y, z);
+                
+                const wireGeo = new THREE.WireframeGeometry(geo);
+                const wireMat = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 0.3 });
+                const wireframe = new THREE.LineSegments(wireGeo, wireMat);
+                wireframe.scale.set(1.05, 1.05, 1.05);
+                node.add(wireframe);
+                
+                scene.add(node);
+                return node;
+            }
+
+            const node1 = createNode(0x00f3ff, 60, -150, 80, -400); 
+            const node2 = createNode(0xbc13fe, 100, 220, -100, -800); 
+            const node3 = createNode(0xff0055, 40, -120, -60, -1200); 
+
+            let scrollProgress = 0;
+            window.addEventListener('scroll', () => {
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                scrollProgress = window.scrollY / maxScroll;
+            });
+
+            let targetShipZ = 0, currentShipZ = 0, targetShipX = 0, currentShipX = 0, targetShipRoll = 0, currentShipRoll = 0;
+            const clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = clock.getElapsedTime();
+
+                nebula.rotation.z = time * 0.02;
+                stars.position.z = (time * 100) % 1000;
+
+                node1.rotation.y = time * 0.1; node1.rotation.x = time * 0.05;
+                node2.rotation.y = time * 0.05; node2.rotation.z = time * 0.08;
+                node3.rotation.y = time * 0.15; node3.rotation.x = time * 0.1;
+
+                targetShipZ = -(scrollProgress * 1500); 
+                targetShipX = Math.sin(scrollProgress * Math.PI * 6) * 40;
+                targetShipRoll = (targetShipX - currentShipX) * -0.05;
+
+                currentShipZ += (targetShipZ - currentShipZ) * 0.05;
+                currentShipX += (targetShipX - currentShipX) * 0.05;
+                currentShipRoll += (targetShipRoll - currentShipRoll) * 0.1;
+
+                shipGroup.position.set(currentShipX, Math.sin(time*2)*4, currentShipZ - 40); 
+                shipGroup.rotation.z = currentShipRoll; 
+                shipGroup.rotation.x = Math.sin(time*1.5)*0.05; 
+                
+                engineGlow.scale.set(6 + Math.random()*2, 6 + Math.random()*2, 1);
+
+                camera.position.z = currentShipZ;
+                camera.position.x = currentShipX * 0.3; // Slight camera follow
+                camera.lookAt(currentShipX*0.8, 0, currentShipZ - 100); 
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // --- LENIS SMOOTH SCROLL ---
+        function initLenis() {
+            const lenis = new Lenis({ duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
+            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+            requestAnimationFrame(raf);
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time)=>{ lenis.raf(time * 1000) });
+            gsap.ticker.lagSmoothing(0, 0);
+        }
+    </script>
+</body>
+</html>
